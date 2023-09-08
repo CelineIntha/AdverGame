@@ -3,9 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlagMaster</title>
+    <title>Flop Rugby</title>
+    <style>
+        canvas {
+            border: 2px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
+
 <body>
-    
+    <canvas id="gameCanvas" width="1000" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const trexImage = new Image();
+        trexImage.src = "/assets/images/trex.png";
+
+        const cactusImage = new Image();
+        cactusImage.src = "/assets/images/cactus.png";
+
+        const gravity = 0.5;
+        let jumping = false;
+        let jumpSpeed = -10;
+        const groundY = canvas.height - 50;
+
+        const cactusList = [];
+        const spawnCactusInterval = 1500;
+        let score = 0;
+
+        const font = "36px Arial";
+
+        function drawTrex(x, y) {
+            ctx.drawImage(trexImage, x, y);
+        }
+
+        function drawCactus(x, y) {
+            ctx.drawImage(cactusImage, x, y);
+        }
+
+        function collision(trexX, trexY, cactusX, cactusY) {
+            return (
+                trexX < cactusX + cactusImage.width &&
+                trexX + trexImage.width > cactusX &&
+                trexY < cactusY + cactusImage.height &&
+                trexY + trexImage.height > cactusY
+            );
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < cactusList.length; i++) {
+                cactusList[i].x -= 10;
+                drawCactus(cactusList[i].x, cactusList[i].y);
+
+                if (cactusList[i].x + cactusImage.width < 0) {
+                    cactusList.splice(i, 1);
+                    i--;
+                    score++;
+                }
+
+                if (
+                    collision(50, canvas.height - trexImage.height, cactusList[i].x, cactusList[i].y)
+                ) {
+                    alert("Game Over! Your Score: " + score);
+                    document.location.reload();
+                }
+            }
+
+            if (jumping) {
+                trexY += jumpSpeed;
+                jumpSpeed += gravity;
+                if (trexY >= groundY) {
+                    trexY = groundY;
+                    jumping = false;
+                    jumpSpeed = -10;
+                }
+            }
+
+            drawTrex(50, trexY);
+            drawScore();
+
+            requestAnimationFrame(updateGame);
+        }
+
+        function drawScore() {
+            ctx.font = font;
+            ctx.fillStyle = "white";
+            ctx.fillText("Score: " + score, 10, 30);
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === " " && !jumping) {
+                jumping = true;
+                jumpSpeed = -10;
+            }
+        });
+
+        setInterval(function () {
+            const cactusY = groundY - cactusImage.height;
+            cactusList.push({ x: canvas.width, y: cactusY });
+        }, spawnCactusInterval);
+
+        let trexY = groundY;
+        updateGame();
+    </script>
 </body>
 </html>
