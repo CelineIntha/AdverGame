@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flop Rugby</title>
+    <title>T-Rex Runner</title>
     <style>
-        canvas {
+        #gameCanvas {
             border: 2px solid black;
             display: block;
             margin: 0 auto;
+            background-color: rgb(243, 250, 215);
         }
+
+
     </style>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <canvas id="gameCanvas" width="1000" height="600"></canvas>
-
+    <canvas id="gameCanvas" width="1200" height="600"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
         const trexImage = new Image();
-        trexImage.src = "/assets/images/trex.png";
+        trexImage.src = "/assets/images/flopman.png";
 
         const cactusImage = new Image();
         cactusImage.src = "/assets/images/cactus.png";
+        cactusImage.style.height = "100";
 
-        const gravity = 0.5;
+        const gravity = 1;
         let jumping = false;
-        let jumpSpeed = -10;
-        const groundY = canvas.height - 50;
+        let jumpSpeed = 15;
+        const groundY = canvas.height - trexImage.height - 50;
+
+        let trexX = 50;
+        let trexY = groundY;
+        let trexYSpeed = 0;
 
         const cactusList = [];
         const spawnCactusInterval = 1500;
@@ -38,8 +42,8 @@
 
         const font = "36px Arial";
 
-        function drawTrex(x, y) {
-            ctx.drawImage(trexImage, x, y);
+        function drawTrex() {
+            ctx.drawImage(trexImage, trexX, trexY);
         }
 
         function drawCactus(x, y) {
@@ -58,6 +62,25 @@
         function updateGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            if (jumping) {
+                trexY -= jumpSpeed;
+                jumpSpeed -= gravity;
+                if (trexY >= groundY) {
+                    trexY = groundY;
+                    jumping = false;
+                    jumpSpeed = 15;
+                }
+            } else {
+                trexY += trexYSpeed;
+                trexYSpeed += gravity;
+                if (trexY >= groundY) {
+                    trexY = groundY;
+                    trexYSpeed = 0;
+                }
+            }
+
+            drawTrex();
+
             for (let i = 0; i < cactusList.length; i++) {
                 cactusList[i].x -= 10;
                 drawCactus(cactusList[i].x, cactusList[i].y);
@@ -68,27 +91,13 @@
                     score++;
                 }
 
-                if (
-                    collision(50, canvas.height - trexImage.height, cactusList[i].x, cactusList[i].y)
-                ) {
+                if (collision(trexX, trexY, cactusList[i].x, cactusList[i].y)) {
                     alert("Game Over! Your Score: " + score);
                     document.location.reload();
                 }
             }
 
-            if (jumping) {
-                trexY += jumpSpeed;
-                jumpSpeed += gravity;
-                if (trexY >= groundY) {
-                    trexY = groundY;
-                    jumping = false;
-                    jumpSpeed = -10;
-                }
-            }
-
-            drawTrex(50, trexY);
             drawScore();
-
             requestAnimationFrame(updateGame);
         }
 
@@ -101,16 +110,15 @@
         document.addEventListener("keydown", function (event) {
             if (event.key === " " && !jumping) {
                 jumping = true;
-                jumpSpeed = -10;
+                jumpSpeed = 15;
             }
         });
 
         setInterval(function () {
-            const cactusY = groundY - cactusImage.height;
+            const cactusY = groundY - cactusImage.height + 300;
             cactusList.push({ x: canvas.width, y: cactusY });
         }, spawnCactusInterval);
 
-        let trexY = groundY;
         updateGame();
     </script>
 </body>
