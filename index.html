@@ -1,69 +1,17 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <title>Jeux de course similaire à T-Rex Run</title>
-    <style>
-        #game-container {
-            margin: auto;
-            width: 800px;
-            height: 400px;
-            border: 1px solid #ccc;
-            position: relative;
-        }
-
-        #trex {
-            width: 70px;
-            height: 120px;
-            position: absolute;
-            bottom: 0;
-            left: 50px;
-        }
-
-        .cactus {
-            width: 20px;
-            height: 40px;
-            position: absolute;
-            bottom: 0;
-            background-color: green;
-        }
-
-        #score-container {
-            font-size: 24px;
-            text-align: center;
-            width: 100%;
-            position: absolute;
-            top: 10px;
-            left: 0;
-        }
-
-        #game-over {
-            font-size: 36px;
-            text-align: center;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 999;
-        }
-
-        #game-over button {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div id="game-container">
         <img src="/assets/images/flopman.png" id="trex"></div>
     </div>
     <div id="score-container">Score: <span id="score">0</span></div>
+
     
     <!-- Écran Game Over -->
     <div id="game-over">
@@ -72,107 +20,8 @@
         <button onclick="restartGame()">Rejouer</button>
     </div>
 
-    <script>
-        const gameContainer = document.getElementById("game-container");
-        const trex = document.getElementById("trex");
-        const scoreDisplay = document.getElementById("score");
-        const gameOverScreen = document.getElementById("game-over");
-        const gameOverScoreDisplay = document.getElementById("game-over-score");
-        let isJumping = false;
-        let score = 0;
-        let gameIsOver = false;
-
-        function jump() {
-            if (!isJumping && !gameIsOver) {
-                isJumping = true;
-                let jumpHeight = 0;
-                const jumpInterval = setInterval(() => {
-                    if (jumpHeight < 100) {
-                        jumpHeight += 8;
-                        trex.style.bottom = jumpHeight + "px";
-                    } else {
-                        clearInterval(jumpInterval);
-                        const fallInterval = setInterval(() => {
-                            if (jumpHeight > 0) {
-                                jumpHeight -= 5;
-                                trex.style.bottom = jumpHeight + "px";
-                            } else {
-                                clearInterval(fallInterval);
-                                isJumping = false;
-                            }
-                        }, 20);
-                    }
-                }, 20);
-            }
-        }
-
-        function createCactusWithRandomIntervalAndPosition() {
-    if (!gameIsOver) {
-        const cactus = document.createElement("div");
-        cactus.classList.add("cactus");
-        const cactusPosition = 800;
-        const randomPosition = Math.floor(Math.random() * 400) + 800; // Position horizontale aléatoire entre 800 et 1200 pixels (réduite à 800 et 1200)
-        cactus.style.left = randomPosition + "px";
-        cactus.style.bottom = "0px"; // Vous pouvez définir la hauteur de manière fixe si vous le souhaitez
-        gameContainer.appendChild(cactus);
-
-        const moveCactus = setInterval(() => {
-            const cactusLeft = parseInt(getComputedStyle(cactus).left);
-            if (cactusLeft > -20) {
-                cactus.style.left = (cactusLeft - 5) + "px";
-            } else {
-                clearInterval(moveCactus);
-                gameContainer.removeChild(cactus);
-            }
-
-            const trexBottom = parseInt(getComputedStyle(trex).bottom);
-            const trexLeft = parseInt(getComputedStyle(trex).left);
-            const trexRight = trexLeft + 50;
-            const cactusRight = cactusLeft + 8;
-
-            if (
-                trexBottom <= 40 &&
-                trexRight >= cactusLeft &&
-                trexLeft <= cactusRight
-            ) {
-                clearInterval(moveCactus);
-                endGame();
-            }
-        }, 20);
-
-        // Générer un délai aléatoire entre les apparitions des cactus (entre 1 et 3 secondes)
-        const randomInterval = Math.floor(Math.random() * 2000) + 1000;
-        setTimeout(createCactusWithRandomIntervalAndPosition, randomInterval);
-    }
-}
-
-// Appel initial pour commencer le jeu
-createCactusWithRandomIntervalAndPosition();
-
-        function updateScore() {
-            if (!gameIsOver) {
-                score++;
-                scoreDisplay.textContent = score;
-            }
-        }
-
-        function endGame() {
-            gameIsOver = true;
-            gameOverScoreDisplay.textContent = score;
-            gameOverScreen.style.display = "flex";
-        }
-
-        function restartGame() {
-            location.reload();
-        }
-
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Spacebar" || event.key === " ") {
-                jump();
-            }
-        });
-
-        setInterval(updateScore, 100);
+    <script src="assets/js/script.js">
+        
     </script>
 </body>
 </html>
