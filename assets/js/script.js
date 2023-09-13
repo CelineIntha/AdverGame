@@ -26,9 +26,9 @@ function jump() {
                         clearInterval(fallInterval);
                         isJumping = false;
                     }
-                }, 20);
+                }, 30);
             }
-        }, 20);
+        }, 30);
     }
 }
 
