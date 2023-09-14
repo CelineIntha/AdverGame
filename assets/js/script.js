@@ -88,9 +88,9 @@ function endGame() {
     gameOverScreen.style.display = "flex";
 }
 
-function restartGame() {
-    location.reload();
-}
+// function restartGame() {
+//     location.reload();
+// }
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Spacebar" || event.key === " ") {
@@ -99,3 +99,9 @@ document.addEventListener("keydown", (event) => {
 });
 
 setInterval(updateScore, 100);
+
+let viewRank = document.querySelector('#rank')
+
+viewRank.addEventListener('click', function () {
+    window.location.replace('form.html?res=' + score)
+})
