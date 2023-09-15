@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flop</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="game-container">
-        <img src="/assets/images/flopman.png" id="trex"></div>
+        <img src="/assets/images/flopman.png" id="trex">
     </div>
-    <div id="score-container">Score: <span id="score">0</span></div>
+    <!-- <img src="/assets/images/grass.jpg" class="grass"></div> -->
+    </div>
+    <div id="score-container" class="topScore">Score: <span id="score" class="topScoreNumber">0</span></div>
 
-    
+    <div class="instructions">
+        <img src="/assets/images/spacebar.jpg" alt="Touche espace" class="spacebar">
+        <h4>Appuyez sur espace pour sauter</h4>
+    </div>
     <!-- Écran Game Over -->
     <div id="game-over">
-        <div>Game Over!</div>
-        <div>Score: <span id="game-over-score">0</span></div>
+        <div class="gameOverMsg">Game Over!</div>
+        <div>Score: <span id="game-over-score" class="score">0</span></div>
         <p>Top ou flop ?</p>
         <p>Participez au concours pour le savoir !</p>
-        <button id="rank">Let's go !</button>
+        <button id="rank" class="btn">Let's go !</button>
     </div>
 
     <script src="assets/js/script.js">
-        
+
     </script>
 </body>
+
 </html>
