@@ -103,5 +103,5 @@ setInterval(updateScore, 100);
 let viewRank = document.querySelector('#rank')
 
 viewRank.addEventListener('click', function () {
-    window.location.replace('form.html?res=' + score)
+    window.location.replace('form.php?res=' + score)
 })
